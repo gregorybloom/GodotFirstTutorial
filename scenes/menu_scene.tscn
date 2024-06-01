@@ -1,0 +1,55 @@
+[gd_scene load_steps=4 format=3 uid="uid://bi4q8j2qejfas"]
+
+[ext_resource type="FontFile" uid="uid://7avs7kjpkm0p" path="res://assets/fonts/PixelOperator8.ttf" id="1_3gtl7"]
+[ext_resource type="Script" path="res://scripts/menus/multiplayer_hud.gd" id="1_fgtlp"]
+[ext_resource type="FontFile" uid="uid://cvtnt7y8notbr" path="res://assets/fonts/PixelOperator8-Bold.ttf" id="1_t7rnj"]
+
+[node name="menu_scene" type="Node2D"]
+
+[node name="MultiplayerHUD" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_fgtlp")
+
+[node name="Panel" type="Panel" parent="MultiplayerHUD"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MultiplayerHUD/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PlayOffline" type="Button" parent="MultiplayerHUD/Panel/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_3gtl7")
+theme_override_font_sizes/font_size = 8
+text = "Play Offline"
+
+[node name="HostGame" type="Button" parent="MultiplayerHUD/Panel/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_t7rnj")
+theme_override_font_sizes/font_size = 8
+text = "Host New Game
+"
+
+[node name="JoinGame" type="Button" parent="MultiplayerHUD/Panel/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_3gtl7")
+theme_override_font_sizes/font_size = 8
+text = "Join Game
+"
+
+[connection signal="pressed" from="MultiplayerHUD/Panel/VBoxContainer/HostGame" to="MultiplayerHUD" method="become_host"]
+[connection signal="pressed" from="MultiplayerHUD/Panel/VBoxContainer/JoinGame" to="MultiplayerHUD" method="join_game"]
