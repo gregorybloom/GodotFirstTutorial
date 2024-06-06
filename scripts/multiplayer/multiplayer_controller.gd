@@ -10,14 +10,17 @@ var direction = 1
 
 @onready var animated_sprite_2d = $AnimatedSprite2D
 
+
 @export var player_id := 1:
 	set(id):
 		player_id = id
+		# grants client-side authority (the ability to set the replicated variables) for the input control 
+		%InputSynchronizer.set_multiplayer_authority(id)
 
 func _apply_animations(delta):
 	# Get the input direction: -1, 0, 1
 #	var direction = Input.get_axis("ui_left", "ui_right")
-	direction = Input.get_axis("move_left", "move_right")
+#	direction = Input.get_axis("move_left", "move_right")
 
 	# Flip the Sprite
 	if direction > 0:
@@ -47,8 +50,7 @@ func _apply_movement_from_input(delta):
 		velocity.y = JUMP_VELOCITY
 
 	# Get the input direction: -1, 0, 1
-#	var direction = Input.get_axis("ui_left", "ui_right")
-	direction = Input.get_axis("move_left", "move_right")
+	direction = %InputSynchronizer.input_direction
 
 	# Apply movement	
 	if direction:
@@ -59,4 +61,5 @@ func _apply_movement_from_input(delta):
 	move_and_slide()
 
 func _physics_process(delta):
-	
+	if multiplayer.is_server():
+		_apply_movement_from_input(delta)

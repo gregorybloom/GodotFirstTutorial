@@ -39,7 +39,7 @@ func _add_player_to_game(netid: int):
 	player_to_add.player_id = netid
 	player_to_add.name = str(netid)
 	
-	_players_spawn_node.add_child(player_to_add)
+	_players_spawn_node.add_child(player_to_add, true)
 	
 func _del_player(netid: int):
 	print("Player %s left the game!" % netid)

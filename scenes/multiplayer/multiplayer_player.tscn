@@ -1,7 +1,21 @@
-[gd_scene load_steps=26 format=3 uid="uid://daul1vht37wc8"]
+[gd_scene load_steps=29 format=3 uid="uid://daul1vht37wc8"]
 
 [ext_resource type="Script" path="res://scripts/multiplayer/multiplayer_controller.gd" id="1_ykcss"]
 [ext_resource type="Texture2D" uid="uid://ck0c4qe5jkf7p" path="res://assets/sprites/knight.png" id="2_qh5h4"]
+[ext_resource type="Script" path="res://scenes/multiplayer/MultiplayerInput.gd" id="3_t8axm"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_5u12j"]
+properties/0/path = NodePath(".:player_id")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath(".:position")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_50562"]
+properties/0/path = NodePath("InputSynchronizer:input_direction")
+properties/0/spawn = true
+properties/0/replication_mode = 1
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_x47xo"]
 atlas = ExtResource("2_qh5h4")
@@ -173,7 +187,14 @@ radius = 5.09902
 
 [node name="MultiplayerPlayer" type="CharacterBody2D"]
 script = ExtResource("1_ykcss")
-player_id = null
+
+[node name="PlayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_5u12j")
+
+[node name="InputSynchronizer" type="MultiplayerSynchronizer" parent="."]
+unique_name_in_owner = true
+replication_config = SubResource("SceneReplicationConfig_50562")
+script = ExtResource("3_t8axm")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(0, -12)
@@ -190,5 +211,3 @@ zoom = Vector2(4, 4)
 limit_bottom = 176
 limit_smoothed = true
 position_smoothing_enabled = true
-
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
