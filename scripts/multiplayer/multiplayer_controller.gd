@@ -7,6 +7,8 @@ const JUMP_VELOCITY = -400.0
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 var direction = 1
+var do_jump = false
+var _is_on_floor = true
 
 @onready var animated_sprite_2d = $AnimatedSprite2D
 
@@ -17,10 +19,17 @@ var direction = 1
 		# grants client-side authority (the ability to set the replicated variables) for the input control 
 		%InputSynchronizer.set_multiplayer_authority(id)
 
+func _ready():
+	# is this local player?
+	if multiplayer.get_unique_id() == player_id:
+		$Camera2D.make_current()
+	else:
+		$Camera2D.enabled = false
+
 func _apply_animations(delta):
 	# Get the input direction: -1, 0, 1
-#	var direction = Input.get_axis("ui_left", "ui_right")
-#	direction = Input.get_axis("move_left", "move_right")
+	#	var direction = Input.get_axis("ui_left", "ui_right")
+	#	direction = Input.get_axis("move_left", "move_right")
 
 	# Flip the Sprite
 	if direction > 0:
@@ -29,7 +38,7 @@ func _apply_animations(delta):
 		animated_sprite_2d.flip_h = true
 		
 	# Play animations
-	if is_on_floor():
+	if _is_on_floor:
 		if direction == 0:
 			animated_sprite_2d.play("idle")
 		else:
@@ -46,8 +55,9 @@ func _apply_movement_from_input(delta):
 
 	# Handle jump.
 #	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
-	if Input.is_action_just_pressed("jump") and is_on_floor():
+	if do_jump and is_on_floor():
 		velocity.y = JUMP_VELOCITY
+		do_jump = false
 
 	# Get the input direction: -1, 0, 1
 	direction = %InputSynchronizer.input_direction
@@ -62,4 +72,8 @@ func _apply_movement_from_input(delta):
 
 func _physics_process(delta):
 	if multiplayer.is_server():
+		_is_on_floor = is_on_floor()
 		_apply_movement_from_input(delta)
+
+	if not multiplayer.is_server() || MultiplayerManager.host_mode_enabled:
+		_apply_animations(delta)
