@@ -8,7 +8,7 @@ var multiplayer_player = preload("res://scenes/multiplayer/multiplayer_player.ts
 var _players_spawn_node
 var host_mode_enabled = false
 var multiplayer_mode_enabled = false
-var respawn_point = Vector2(30, 20)
+var respawn_point = Vector2(30, 30)
 
 func become_host():
 	print("Starting Host")

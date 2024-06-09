@@ -84,6 +84,7 @@ func _physics_process(delta):
 
 func mark_dead():
 	print("Mark player dead!")
+	position = MultiplayerManager.respawn_point
 	alive = false
 	$CollisionShape2D.set_deferred("disabled", true)
 	$RespawnTimer.start()

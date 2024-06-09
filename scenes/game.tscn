@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://cihol2m6g0jp"]
+[gd_scene load_steps=17 format=3 uid="uid://cihol2m6g0jp"]
 
 [ext_resource type="PackedScene" uid="uid://crku81g8hhihj" path="res://scenes/player.tscn" id="1_ko0lx"]
 [ext_resource type="Texture2D" uid="uid://cbq17c066jmig" path="res://assets/sprites/world_tileset.png" id="2_8hel0"]
@@ -8,6 +8,7 @@
 [ext_resource type="FontFile" uid="uid://7avs7kjpkm0p" path="res://assets/fonts/PixelOperator8.ttf" id="6_j288a"]
 [ext_resource type="PackedScene" uid="uid://l38iak0kgsop" path="res://scenes/green_slime.tscn" id="6_rffxp"]
 [ext_resource type="PackedScene" uid="uid://bi4q8j2qejfas" path="res://scenes/menu_scene.tscn" id="8_tyqmp"]
+[ext_resource type="Script" path="res://scripts/multiplayer/finish_line.gd" id="9_wec3m"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_of0e2"]
 texture = ExtResource("2_8hel0")
@@ -453,6 +454,9 @@ _data = {
 "move": SubResource("Animation_cihnx")
 }
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3d2gy"]
+size = Vector2(28, 21)
+
 [node name="Game" type="Node2D"]
 position = Vector2(-151, 3.8147e-06)
 
@@ -558,3 +562,13 @@ spawn_path = NodePath("../Players")
 spawn_limit = 3
 
 [node name="Players" type="Node2D" parent="."]
+
+[node name="FinishLine" type="Area2D" parent="."]
+collision_mask = 2
+script = ExtResource("9_wec3m")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FinishLine"]
+position = Vector2(513, -61.5)
+shape = SubResource("RectangleShape2D_3d2gy")
+
+[connection signal="body_entered" from="FinishLine" to="FinishLine" method="_on_body_entered"]
